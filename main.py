@@ -28,3 +28,19 @@ else:
 	vs = cv2.VideoCapture(args["video"])
 # allow the camera or video file to warm up
 time.sleep(2.0)
+
+# keep looping
+while True:
+	# grab the current frame
+	frame = vs.read()
+	# handle the frame from VideoCapture or VideoStream
+	frame = frame[1] if args.get("video", False) else frame
+	# if we are viewing a video and we did not grab a frame,
+	# then we have reached the end of the video
+	if frame is None:
+		break
+	# resize the frame, blur it, and convert it to the HSV
+	# color space
+	frame = imutils.resize(frame, width=600)
+	blurred = cv2.GaussianBlur(frame, (11, 11), 0)
+	hsv = cv2.cvtColor(blurred, cv2.COLOR_BGR2HSV)
